@@ -58,7 +58,7 @@ fn direction_to_vector(value: (Direction, i16)) -> Vector {
 }
 
 fn part1(buffer: &str) -> Result<()> {
-    let position = buffer.split(",")
+    let position = buffer.split(',')
         .map(str::trim)
         .map(parse_move)
         .filter_map(result::Result::ok)
@@ -81,7 +81,7 @@ fn part1(buffer: &str) -> Result<()> {
 fn part2(buffer: &str) -> Result<()> {
     let mut position: Vector = (0, 0);
     let mut visited = HashSet::new();
-    let steps = buffer.split(",")
+    let steps = buffer.split(',')
         .map(str::trim)
         .map(parse_move)
         .filter_map(result::Result::ok)
