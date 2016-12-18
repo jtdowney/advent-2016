@@ -27,7 +27,7 @@ const DIRECTIONS: [Direction; 4] =
 fn parse_move(part: &str) -> Result<(&str, i16)> {
     let turn = &part[0..1];
     let length = part[1..].parse().chain_err(|| "unable to parse");
-    length.map(|l| (turn, l))
+    length.map(|length| (turn, length))
 }
 
 fn move_to_direction(current_direction: &mut i8, value: (&str, i16)) -> Option<(Direction, i16)> {
@@ -57,8 +57,8 @@ fn direction_to_vector(value: (Direction, i16)) -> Vector {
     }
 }
 
-fn part1(buffer: &str) -> Result<()> {
-    let position = buffer.split(',')
+fn part1(input: &str) -> Result<()> {
+    let position = input.split(',')
         .map(str::trim)
         .map(parse_move)
         .filter_map(result::Result::ok)
@@ -78,10 +78,10 @@ fn part1(buffer: &str) -> Result<()> {
     Ok(())
 }
 
-fn part2(buffer: &str) -> Result<()> {
+fn part2(input: &str) -> Result<()> {
     let mut position: Vector = (0, 0);
     let mut visited = HashSet::new();
-    let steps = buffer.split(',')
+    let steps = input.split(',')
         .map(str::trim)
         .map(parse_move)
         .filter_map(result::Result::ok)

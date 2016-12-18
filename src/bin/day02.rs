@@ -4,7 +4,7 @@ use common::Problem;
 use common::errors::*;
 use std::env;
 use std::fs::File;
-use std::io::{BufRead, BufReader};
+use std::io::Read;
 
 type Coord = (i8, i8);
 const INITIAL_COORD: Coord = (1, 1);
@@ -66,25 +66,25 @@ fn process_move<F>(coord: Coord, direction: char, keypad: &F) -> Coord
     }
 }
 
-fn process_line<F>(initial_coord: Coord, line: String, keypad: &F) -> Coord
+fn process_line<F>(initial_coord: Coord, input: &str, keypad: &F) -> Coord
     where F: Fn(Coord) -> Option<char>
 {
-    line.chars().fold(initial_coord, |coord, c| process_move(coord, c, keypad))
+    input.chars().fold(initial_coord, |coord, c| process_move(coord, c, keypad))
 }
 
 fn run() -> Result<()> {
     let problem = Problem::from_arg(1)?;
     let filename = env::args().nth(2).expect("Must provide filename");
-    let file = File::open(filename)?;
-    let reader = BufReader::new(file);
+    let mut file = File::open(filename)?;
+    let mut buffer = String::new();
+    file.read_to_string(&mut buffer)?;
 
     let keypad = match problem {
         Problem::Part1 => part1::keypad,
         Problem::Part2 => part2::keypad,
     };
 
-    let answer = reader.lines()
-        .filter_map(|line| line.ok())
+    let answer = buffer.lines()
         .scan(INITIAL_COORD, |last_coord, line| {
             *last_coord = process_line(*last_coord, line, &keypad);
             Some(*last_coord)

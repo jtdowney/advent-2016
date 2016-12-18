@@ -29,8 +29,8 @@ impl Triangle {
     }
 }
 
-fn part1(buffer: &str) -> Result<()> {
-    let count = buffer.lines()
+fn part1(input: &str) -> Result<()> {
+    let count = input.lines()
         .map(Triangle::from_str)
         .filter_map(result::Result::ok)
         .filter(Triangle::is_possible)
@@ -40,8 +40,8 @@ fn part1(buffer: &str) -> Result<()> {
     Ok(())
 }
 
-fn part2(buffer: &str) -> Result<()> {
-    let parts = buffer.split_whitespace().collect::<Vec<_>>();
+fn part2(input: &str) -> Result<()> {
+    let parts = input.split_whitespace().collect::<Vec<_>>();
     let count = parts.chunks(9)
         .flat_map(|parts| {
             vec![Triangle(parts[0].parse().unwrap(),
