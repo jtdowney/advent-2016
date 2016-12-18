@@ -10,4 +10,6 @@ path = "src/common/lib.rs"
 [dependencies]
 error-chain = "^0.7"
 num-integer = "^0.1"
+lazy_static = "^0.2"
+regex = "^0.1"
 rust-crypto = "^0.2"
