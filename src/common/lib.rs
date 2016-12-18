@@ -9,6 +9,7 @@ pub mod errors {
     error_chain!{
         foreign_links {
             Fmt(::std::fmt::Error);
+            FromUtf8(::std::string::FromUtf8Error);
             Io(::std::io::Error);
             ParseInt(::std::num::ParseIntError);
             Utf8(::std::str::Utf8Error);
