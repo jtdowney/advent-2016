@@ -1,5 +1,4 @@
 extern crate common;
-extern crate crypto;
 
 use common::Problem;
 use common::errors::*;
