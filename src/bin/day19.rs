@@ -3,10 +3,10 @@ extern crate num_integer;
 
 use common::Problem;
 use common::errors::*;
+use std::collections::VecDeque;
 use std::env;
 use std::fs::File;
 use std::io::Read;
-use std::str;
 
 #[derive(Debug)]
 struct Elf {
@@ -28,11 +28,8 @@ fn part1(input: &str) -> Result<()> {
     let mut i = 0;
     loop {
         if i >= elves.len() {
-            let before = elves.len();
             elves.retain(|e| e.count > 0);
             i = 0;
-
-            println!("Reached end, removing {} elves", before - elves.len());
         }
 
         if elves.len() == 1 {
@@ -45,17 +42,14 @@ fn part1(input: &str) -> Result<()> {
         }
 
         let left = num_integer::mod_floor(i + 1, elves.len());
-        // println!("{} stole {} presents from {}",
-        //          elves[i].id,
-        //          elves[left].count,
-        //          elves[left].id);
         elves[i].count += elves[left].count;
         elves[left].count = 0;
 
         i += 1;
     }
 
-    println!("{:?}", elves);
+    let winner = elves.first().unwrap();
+    println!("Winning elf {}", winner.id);
 
     Ok(())
 }
@@ -63,34 +57,30 @@ fn part1(input: &str) -> Result<()> {
 fn part2(input: &str) -> Result<()> {
     let size = input.trim().parse()?;
     let mut elves = (0..size)
-        .map(|i| {
-            Elf {
-                id: i + 1,
-                count: 1,
-            }
-        })
+        .map(|i| i + 1)
         .collect::<Vec<_>>();
 
-    let mut i = 0;
-    loop {
-        if elves.len() == 1 {
-            break;
+    let rest = elves.split_off(size / 2);
+    let mut left = elves.iter().collect::<VecDeque<_>>();
+    let mut right = rest.iter().collect::<VecDeque<_>>();
+
+    while left.len() + right.len() > 1 {
+        if left.len() > right.len() {
+            left.pop_back();
+        } else {
+            right.pop_front();
         }
 
-        if i >= elves.len() {
-            println!("Wrapping around, {} elves remaining", elves.len());
-            i = 0;
-        }
-
-        let count = elves.len();
-        let across = num_integer::mod_floor(i + (count / 2), elves.len());
-        elves[i].count += elves[across].count;
-        elves.remove(across);
-
-        i += 1;
+        right.push_back(left.pop_front().unwrap());
+        left.push_back(right.pop_front().unwrap());
     }
 
-    println!("{:?}", elves);
+    let winner = match left.pop_front() {
+        Some(v) => v,
+        None => right.pop_front().unwrap(),
+    };
+
+    println!("Winning elf {}", winner);
 
     Ok(())
 }
