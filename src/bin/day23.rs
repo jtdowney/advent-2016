@@ -154,7 +154,7 @@ fn solve(input: &str, registers: &mut HashMap<char, i32>) -> Result<()> {
                         Instruction::Copy(a, b) => Instruction::JumpNotZero(a, b),
                         Instruction::JumpNotZero(a, b) => Instruction::Copy(a, b),
                         Instruction::Increment(a) => Instruction::Decrement(a),
-                        Instruction::Decrement(a) => Instruction::Increment(a),
+                        Instruction::Decrement(a) |
                         Instruction::Toggle(a) => Instruction::Increment(a),
                     };
                 }

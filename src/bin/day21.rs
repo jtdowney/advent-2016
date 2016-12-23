@@ -163,7 +163,7 @@ fn part2(input: &str) -> Result<()> {
 
     let mut chars = START_WORD.chars().collect::<Vec<_>>();
     loop {
-        let test_word = chars.iter().map(|c| *c).collect::<String>();
+        let test_word = chars.iter().cloned().collect::<String>();
         if scramble(&test_word, &instructions) == TARGET_SCRAMBLE {
             println!("Word {}", test_word);
             break;
